@@ -21,7 +21,7 @@ module TheSortableTreeController
       return render(nothing: true) unless id
       sort = (params[:tree_sort] == 'reversed') ? 'reversed_' : nil
 
-      variable, collection, klass = self.the_define_common_variables
+      variable, _, klass = self.the_define_common_variables
       variable  = self.instance_variable_set(variable, klass.find(id))
       @children = variable.children.send("#{sort}nested_set")
 
@@ -41,7 +41,7 @@ module TheSortableTreeController
 
       return render(nothing: true, status: :no_content) if parent_id.zero? && prev_id.zero? && next_id.zero?
 
-      variable, collection, klass = self.the_define_common_variables
+      variable, _, klass = self.the_define_common_variables
       variable = self.instance_variable_set(variable, klass.find(id))
 
       if prev_id.zero? && next_id.zero?
@@ -52,7 +52,7 @@ module TheSortableTreeController
         variable.move_to_left_of klass.find(next_id)
       end
 
-      render(nothing: true, status: :ok)
+      head :ok
     end
   end
   
@@ -78,7 +78,7 @@ module TheSortableTreeController
         variable.move_to_right_of klass.find(next_id)
       end
 
-      render(nothing: true, status: :ok)
+      head :ok
     end
   end
 end
